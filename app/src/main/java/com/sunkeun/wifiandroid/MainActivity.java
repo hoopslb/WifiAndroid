@@ -115,10 +115,39 @@ public class MainActivity extends AppCompatActivity {
                 if (res.BSSID.equals(result.BSSID))
                     return;
             }
-
             mResults.add(result);
+            /*
+            int type;
+            String name =result.SSID.toString();
+            if ( name.contains("Anatolia"))
+                type=3;
+            else if (name.contains("ATT"))
+                type=2;
+            else if (name.contains("2WIRE"))
+                type=1;
+            else
+                type=0;
+            */
+            // List<Person> sorted = sort(persons, on(Person.class).getAge());
+            Collections.sort(mResults, new Comparator<ScanResult>() {
+                @Override
+                public int compare(ScanResult lhs, ScanResult rhs) {
+                    int ltype = getSSIDtype(lhs);
+                    int rtype = getSSIDtype(rhs);
+                    if (ltype > rtype)
+                        return -1;
+
+                    else if (rtype> ltype)
+                        return 1;
+
+                    else
+                        return 0;
+                }
+            });
+            /* Original
 
             Collections.sort(mResults, new Comparator<ScanResult>() {
+
                 @Override
                 public int compare(ScanResult lhs, ScanResult rhs) {
                     if (lhs.level > rhs.level)
@@ -130,7 +159,21 @@ public class MainActivity extends AppCompatActivity {
                     else
                         return 0;
                 }
+
+
             });
+            */
+            }
+        private int getSSIDtype(ScanResult result){
+            String name =result.SSID.toString();
+            if ( name.contains("Anatolia"))
+                return 3;
+            else if (name.contains("ATT"))
+                return 2;
+            else if (name.contains("2WIRE"))
+                return 1;
+            else
+                return 0;
         }
         public void reset(){
             mResults.clear();
